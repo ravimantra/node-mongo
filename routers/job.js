@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Job = require('../models/job');
+const Job = require('../models/job.model');
 
 
 router.get('/', async (req, res) => {
@@ -27,8 +27,8 @@ router.post('/', async (req, res) => {
     location: req.body.location
   });
   try {
-    const data = await jobs.save()
-    res.json(data);
+    await jobs.save()
+    res.status(200).send('job saved successfully');
   } catch(err) {
     res.send(err);
   }
