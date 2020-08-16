@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Job = require('../models/job.model');
+const verifyToken = require('../utils/verifyToken');
 
 
-router.get('/', async (req, res) => {
+router.get('/job', verifyToken, async (req, res) => {
   try {
     const jobs = await Job.find();
     res.json(jobs);
@@ -12,7 +13,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/job/:id', verifyToken, async (req, res) => {
   try {
     const data = await Job.findById(req.params.id)
     res.json(data);
@@ -21,7 +22,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/job', async (req, res) => {
   const jobs = new Job({
     title: req.body.title,
     location: req.body.location
@@ -34,7 +35,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
   try {
     const data = await Job.findById(req.params.id) 
     data.title = req.body.title;
