@@ -35,7 +35,7 @@ router.post('/job', async (req, res) => {
   }
 });
 
-router.put('/:id', verifyToken, async (req, res) => {
+router.put('/job/:id', verifyToken, async (req, res) => {
   try {
     const data = await Job.findById(req.params.id) 
     data.title = req.body.title;
