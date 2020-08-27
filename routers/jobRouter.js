@@ -7,7 +7,7 @@ const verifyToken = require('../utils/verifyToken');
 router.get('/job', verifyToken, async (req, res) => {
   try {
     const jobs = await Job.find();
-    res.json(jobs);
+    res.json({ allJobs: jobs });
   } catch(err) {
     res.send('Error', err);
   }
@@ -29,7 +29,7 @@ router.post('/job', async (req, res) => {
   });
   try {
     await jobs.save()
-    res.status(200).send('job saved successfully');
+    res.status(200).send();
   } catch(err) {
     res.send(err);
   }
@@ -42,6 +42,16 @@ router.put('/:id', verifyToken, async (req, res) => {
     data.location = req.body.location;
     const updatedData = await data.save();
     res.json(updatedData)   
+  } catch(err) {
+    res.send(err);
+  }
+});
+
+router.delete('/job/:id', verifyToken, async (req, res) => {
+  try {
+    const data = await Job.findById(req.params.id);
+    const deleteInfo = await data.remove();
+    res.json(deleteInfo);
   } catch(err) {
     res.send(err);
   }
