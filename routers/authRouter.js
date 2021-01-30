@@ -40,21 +40,31 @@ router.post('/login', async (req, res) => {
   // validate request data
   const { error } = loginUserValidation(req.body);
   if (error) {
-    return res.status(400).send(error.details[0].message);
+    return res.send({
+      success: false,
+      message: error.details[0].message,
+      status: 400
+    });
   }
 
   // check if email or password is correct
   const user = await User.findOne({ email: req.body.email });
-  const isPasswordMatched = await bcrypt.compare(req.body.password, user.password);
+  const isPasswordMatched = await bcrypt.compare(req.body.password, user ? user.password : '');
   if (!user || !isPasswordMatched) {
-    return res.status(400).send('Email or password is wrong');
+    return res.send({
+      success: false,
+      message: 'Email or password is wrong',
+      status: 400
+    });
   }
 
   // password is correct
   const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET);
-  res.header('auth-token', token).send({ token: token });
-  // res.sendStatus(200);
-  //res.send('Logged in!');
+  res.header('auth-token', token).send({
+    success: true,
+    message: 'Logged in successfully',
+    token: token
+  });
 })
 
 module.exports = router;
