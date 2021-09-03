@@ -61,11 +61,11 @@ router.post('/login', async (req, res) => {
   // password is correct
   const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET);
   res.cookie('auth-token', token);
-  res.send({ success: true });
+  res.send({ success: true, user: user });
 })
 
 router.get('/logout', async (req, res) => {
-  res.cookie('auth-token', '');
+  res.cookie('auth-token', '', { maxAge: 1 });
   res.send({ success: true });
 })
 
