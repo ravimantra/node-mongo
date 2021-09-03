@@ -9,11 +9,7 @@ const authRouter = require('./routers/authRouter');
 
 // set express app
 const app = express();
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  exposedHeaders: ['auth-token'],
-}
-app.use(cors(corsOptions));
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 // TODO
 app.use(cookieParser());
 
